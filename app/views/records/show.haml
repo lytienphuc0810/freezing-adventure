@@ -1,0 +1,39 @@
+.table_content
+	%table{:border => "1" }
+		%tr
+		- Record::SHOW_ATTR.each do |element| 
+			%td= element.capitalize
+		- @records.each do |record|
+			%tr
+				- Record::SHOW_ATTR.each do |element| 
+					%td= record.send(element)
+				%td= link_to "Edit", "/records/#{record.id}/edit"
+				%td= link_to "Delete", "/records/#{record.id}", :method => :delete
+
+	- if @current_counter != 0 
+		.link= link_to "Next day", "/records/#{@current_counter - 1}" 
+	- else
+		.link= link_to "New record", "/records/new"
+	.link= link_to "Previous day", "/records/#{@current_counter + 1}" 
+	
+	%br
+	%hr
+	%br
+
+	%table{:border => "1" }
+		%tr
+			%td
+				TOTAL
+		%tr
+			- Record::MANIFEST.each do |element| 
+				%td= element.capitalize
+		%tr
+			- Record::MANIFEST.each do |element|
+				%td
+					- if @records.empty?
+						= 0
+					- else
+						- if @records.first.send(element).is_a? String
+							=	@records.count
+						- else
+							= @records.map{|a| a.send(element)}.sum

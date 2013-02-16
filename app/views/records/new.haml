@@ -1,0 +1,7 @@
+.form_content
+	= form_for @record do |f|
+		- Record::ATTR.each do |element|
+			= f.label element.to_sym
+			= f.text_field element.to_sym
+			%br
+		= f.submit "submit"
